@@ -4,10 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
@@ -18,7 +22,7 @@ public class AccountGroup extends Model{
 	
 	@Id
 	@GeneratedValue
-	public Long groupId;
+	public Long accountGroupId;
 	
 	@ManyToOne
 	public Account creator;
@@ -28,13 +32,18 @@ public class AccountGroup extends Model{
 	public String groupDescription;
 	
 	
-	 @ManyToMany(fetch=FetchType.EAGER)
-	 public Set<Account> members = new HashSet<Account>();
+	 @ManyToMany(targetEntity=models.Account.class,cascade=CascadeType.ALL)
+	 public Set<Account> groupMembers = new HashSet<Account>();
 	
 	public AccountGroup(){
 		
 	}
 	
+	
+	public void addMember(Account newMember){
+		this.groupMembers.add(newMember);
+		this.save();
+	}
 	
 	public AccountGroup(Account creator,String groupName,String groupDescription){
 		this.creator=creator;

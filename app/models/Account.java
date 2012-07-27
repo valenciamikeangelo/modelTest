@@ -39,7 +39,9 @@ public class Account extends Model {
 	 @JoinTable(name="account_colleague",joinColumns={@JoinColumn(name="account_Id")},inverseJoinColumns={@JoinColumn(name="colleague_Id")})
 	 public Set<Account> colleagues = new HashSet<Account>();
 	 
-		
+	 @ManyToMany(targetEntity=models.AccountGroup.class, mappedBy="groupMembers",cascade=CascadeType.ALL)
+	 public Set<AccountGroup> accountGroups = new HashSet<AccountGroup>();
+	 
 	public Account(){
 		
 	}

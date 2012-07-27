@@ -178,7 +178,7 @@ public class AccountTest {
 		running(fakeApplication(), new Runnable() {
 			public void run() {
 				
-				Account newAccount = new Account("group@test.com", "testname");
+				Account newAccount = new Account("group2@test.com", "testname");
 				newAccount.save();
 				
 				String newGroup="GROUP1";
@@ -199,11 +199,7 @@ public class AccountTest {
 				assertNotNull(searchAccount);
 				assertNotNull(searchAccount.createdGroups);
 				assertEquals(1, searchAccount.createdGroups.size());
-				Ebean.delete(searchAccount);
-				Account delAccountWithPost2 = Account.find.byId(searchAccount
-						.getAccountId());
-				assertNull(delAccountWithPost2);
-				assertEquals(0, AccountGroup.getAccountGroupByAuthor(searchAccount).size());
+				
 			}
 		});
 	}

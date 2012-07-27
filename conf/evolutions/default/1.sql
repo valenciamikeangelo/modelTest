@@ -11,11 +11,11 @@ create table account (
 ;
 
 create table account_group (
-  group_id                  bigint not null,
+  account_group_id          bigint not null,
   creator_account_id        bigint,
   group_name                varchar(255),
   group_description         varchar(255),
-  constraint pk_account_group primary key (group_id))
+  constraint pk_account_group primary key (account_group_id))
 ;
 
 create table comment (
@@ -43,9 +43,9 @@ create table account_colleague (
 ;
 
 create table account_group_account (
-  account_group_group_id         bigint not null,
+  account_group_account_group_id bigint not null,
   account_account_id             bigint not null,
-  constraint pk_account_group_account primary key (account_group_group_id, account_account_id))
+  constraint pk_account_group_account primary key (account_group_account_group_id, account_account_id))
 ;
 create sequence account_seq;
 
@@ -68,7 +68,7 @@ alter table account_colleague add constraint fk_account_colleague_account_01 for
 
 alter table account_colleague add constraint fk_account_colleague_account_02 foreign key (colleague_Id) references account (account_id) on delete restrict on update restrict;
 
-alter table account_group_account add constraint fk_account_group_account_acco_01 foreign key (account_group_group_id) references account_group (group_id) on delete restrict on update restrict;
+alter table account_group_account add constraint fk_account_group_account_acco_01 foreign key (account_group_account_group_id) references account_group (account_group_id) on delete restrict on update restrict;
 
 alter table account_group_account add constraint fk_account_group_account_acco_02 foreign key (account_account_id) references account (account_id) on delete restrict on update restrict;
 
@@ -80,9 +80,9 @@ drop table if exists account;
 
 drop table if exists account_colleague;
 
-drop table if exists account_group;
-
 drop table if exists account_group_account;
+
+drop table if exists account_group;
 
 drop table if exists comment;
 
