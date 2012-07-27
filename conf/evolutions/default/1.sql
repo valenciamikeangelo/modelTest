@@ -26,6 +26,15 @@ create table comment (
   constraint pk_comment primary key (comment_id))
 ;
 
+create table event (
+  event_id                  bigint not null,
+  title                     varchar(255),
+  description               varchar(255),
+  event_date_and_time       timestamp,
+  organizer_account_id      bigint,
+  constraint pk_event primary key (event_id))
+;
+
 create table post (
   post_id                   bigint not null,
   title                     varchar(255),
@@ -47,11 +56,19 @@ create table account_group_account (
   account_account_id             bigint not null,
   constraint pk_account_group_account primary key (account_group_account_group_id, account_account_id))
 ;
+
+create table event_account (
+  event_event_id                 bigint not null,
+  account_account_id             bigint not null,
+  constraint pk_event_account primary key (event_event_id, account_account_id))
+;
 create sequence account_seq;
 
 create sequence account_group_seq;
 
 create sequence comment_seq;
+
+create sequence event_seq;
 
 create sequence post_seq;
 
@@ -59,8 +76,10 @@ alter table account_group add constraint fk_account_group_creator_1 foreign key 
 create index ix_account_group_creator_1 on account_group (creator_account_id);
 alter table comment add constraint fk_comment_post_2 foreign key (post_post_id) references post (post_id) on delete restrict on update restrict;
 create index ix_comment_post_2 on comment (post_post_id);
-alter table post add constraint fk_post_author_3 foreign key (author_account_id) references account (account_id) on delete restrict on update restrict;
-create index ix_post_author_3 on post (author_account_id);
+alter table event add constraint fk_event_organizer_3 foreign key (organizer_account_id) references account (account_id) on delete restrict on update restrict;
+create index ix_event_organizer_3 on event (organizer_account_id);
+alter table post add constraint fk_post_author_4 foreign key (author_account_id) references account (account_id) on delete restrict on update restrict;
+create index ix_post_author_4 on post (author_account_id);
 
 
 
@@ -72,6 +91,10 @@ alter table account_group_account add constraint fk_account_group_account_acco_0
 
 alter table account_group_account add constraint fk_account_group_account_acco_02 foreign key (account_account_id) references account (account_id) on delete restrict on update restrict;
 
+alter table event_account add constraint fk_event_account_event_01 foreign key (event_event_id) references event (event_id) on delete restrict on update restrict;
+
+alter table event_account add constraint fk_event_account_account_02 foreign key (account_account_id) references account (account_id) on delete restrict on update restrict;
+
 # --- !Downs
 
 SET REFERENTIAL_INTEGRITY FALSE;
@@ -82,9 +105,13 @@ drop table if exists account_colleague;
 
 drop table if exists account_group_account;
 
+drop table if exists event_account;
+
 drop table if exists account_group;
 
 drop table if exists comment;
+
+drop table if exists event;
 
 drop table if exists post;
 
@@ -95,6 +122,8 @@ drop sequence if exists account_seq;
 drop sequence if exists account_group_seq;
 
 drop sequence if exists comment_seq;
+
+drop sequence if exists event_seq;
 
 drop sequence if exists post_seq;
 

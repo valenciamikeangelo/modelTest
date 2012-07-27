@@ -6,13 +6,14 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
+import org.joda.time.DateTime;
 
 import play.db.ebean.Model;
 
@@ -34,6 +35,9 @@ public class Account extends Model {
 	@OneToMany(mappedBy="creator",cascade=CascadeType.ALL)
 	public List<AccountGroup> createdGroups;
 	
+	
+	@OneToMany(mappedBy="organizer",cascade=CascadeType.ALL)
+	public List<Event> createdEvents;
 		
 	 @ManyToMany(cascade={CascadeType.ALL})
 	 @JoinTable(name="account_colleague",joinColumns={@JoinColumn(name="account_Id")},inverseJoinColumns={@JoinColumn(name="colleague_Id")})
@@ -42,6 +46,9 @@ public class Account extends Model {
 	 @ManyToMany(targetEntity=models.AccountGroup.class, mappedBy="groupMembers",cascade=CascadeType.ALL)
 	 public Set<AccountGroup> accountGroups = new HashSet<AccountGroup>();
 	 
+	 @ManyToMany(targetEntity=models.Event.class, mappedBy="attendees",cascade=CascadeType.ALL)
+	 public Set<Event> accountEvents = new HashSet<Event>();
+	 
 	public Account(){
 		
 	}
@@ -49,14 +56,12 @@ public class Account extends Model {
 	public Account(String email,String name){
 		this.email=email;
 		this.name=name;
-	
 	}
 	
 	public void addPost(String title,String content){
 		Post newPost= new Post(this,title,content);
 		this.posts.add(newPost);
 		this.save();
-		this.refresh();
 	}
 	
 	public void addColleague(Account colleague){
@@ -70,7 +75,14 @@ public class Account extends Model {
 		newGroup.save();
 		this.createdGroups.add(newGroup);
 		this.save();
-		
+	}
+	
+	
+	public void createEvent(String title,String description,DateTime eventDateAndTime){
+		Event newEvent= new Event(this, title, description, eventDateAndTime);
+		newEvent.save();
+		this.createdEvents.add(newEvent);
+		this.save();
 	}
 	
 	public Long getAccountId() {

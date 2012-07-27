@@ -8,8 +8,10 @@ import static play.test.Helpers.running;
 import models.Account;
 import models.AccountGroup;
 import models.Comment;
+import models.Event;
 import models.Post;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import com.avaje.ebean.Ebean;
@@ -185,7 +187,6 @@ public class AccountTest {
 				String newGroupDesc="FOR GROUP1";
 				
 				newAccount.createGroup(newGroup, newGroupDesc);
-				
 				assertEquals(1, AccountGroup.getAccountGroupByAuthor(newAccount).size());
 				
 				AccountGroup newGroupPers=AccountGroup.getAccountGroupByAuthor(newAccount).get(0);
@@ -203,5 +204,36 @@ public class AccountTest {
 			}
 		});
 	}
-
+	
+	@Test
+	public void createEventTest() {
+		running(fakeApplication(), new Runnable() {
+			public void run() {
+				
+				Account newAccount = new Account("event@test.com", "testname");
+				newAccount.save();
+				
+				String title="EventTitle";
+				String desc="Sample Event";
+				DateTime  date = new DateTime();
+				newAccount.createEvent(title,desc,date);
+				
+				assertEquals(1, Event.getEventsByAuthor(newAccount).size());
+				
+				Event newEventPers=Event.getEventsByAuthor(newAccount).get(0);
+				assertNotNull(newEventPers);
+				assertEquals(title, newEventPers.title);
+				assertEquals(desc, newEventPers.description);
+				assertEquals(date, newEventPers.eventDateAndTime);
+				
+				Account searchAccount = Account.find.byId(newAccount
+						.getAccountId());
+				
+				assertNotNull(searchAccount);
+				assertNotNull(searchAccount.createdEvents);
+				assertEquals(1, searchAccount.createdEvents.size());
+				
+			}
+		});
+	}
 }
