@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.running;
 import models.Account;
-import models.AccountGroup;
 import models.Event;
 
 import org.joda.time.DateTime;
