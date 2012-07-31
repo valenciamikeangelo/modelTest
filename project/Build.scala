@@ -14,7 +14,10 @@ object ApplicationBuild extends Build {
       "org.springframework.social" % "spring-social-web" % "1.0.1.RELEASE",
       "org.springframework.social" % "spring-social-facebook" % "1.0.1.RELEASE",
       "org.springframework.security" % "spring-security-crypto" % "3.1.1.RELEASE",
-      "org.springframework" % "spring-jdbc" % "3.1.1.RELEASE"
+      "org.springframework" % "spring-jdbc" % "3.1.1.RELEASE",
+      "org.springframework" % "spring-context" % "3.1.1.RELEASE",
+      "org.springframework" % "spring-core" % "3.1.1.RELEASE",
+      "org.springframework" % "spring-beans" % "3.1.1.RELEASE"
       
       
     )

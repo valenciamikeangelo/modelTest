@@ -1,26 +1,28 @@
 package controllers;
 
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.facebook.api.Facebook;
-import org.springframework.social.facebook.api.Reference;
-
+import play.api.modules.spring.Spring;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.index;
+import beans.AutowiredBean;
 
 public class Application extends Controller {
 	
-    @Autowired
-	private static Facebook facebook;
+
   
   
   
   public static Result index() {
 	   
-	  List<Reference> friends = facebook.friendOperations().getFriends(); 
-    return ok(index.render("Your new application is ready."));
+		AutowiredBean bean = Spring .getBeanOfType(AutowiredBean.class);
+
+		if (bean == null)
+		notFound("Unable to load MyBean from the Spring Context.");
+
+		return ok("bean.getAutowiredProperty().getBeanName() = "
+		+ bean.getAutowiredProperty().getBeanName());
+	  
+	 // return ok("");
   }
   
 }
